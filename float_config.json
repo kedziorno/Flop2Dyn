@@ -1,0 +1,24 @@
+{
+  "operators": [
+    {
+      "name": "FloatingPointAdder",
+      "bitSize": 32,
+      "targetFrequencyMHz": 450
+    },
+    {
+      "name": "FloatingPointMultiplier",
+      "bitSize": 32,
+      "targetFrequencyMHz": 711    },
+    {
+      "name": "FloatingPointDivider",
+      "bitSize": 32,
+      "targetFrequencyMHz": 400
+    },
+    {
+      "name": "FloatingPointSubtractor",
+      "bitSize": 32,
+      "targetFrequencyMHz": 450
+    }
+  ]
+}
+
