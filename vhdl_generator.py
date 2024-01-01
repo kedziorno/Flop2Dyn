@@ -8,7 +8,8 @@ def generate_vhdl(
         num_test_vectors, 
         vhdl_output_dir, 
         flopoco_executable_path, 
-        clean_simulation_files, 
+        clean_simulation_files,
+        simulate_code, 
         operators_info):
     # Use subprocess to call FloPoCo with the parameters from operator_config
     # Check if 'pipelineStages' is provided and use it if necessary
@@ -51,11 +52,7 @@ def generate_vhdl(
     simulation_command_match = re.search(r"To run the simulation using nvc.*--stop-time=\d+ns", errors, re.DOTALL)
     simulation_command = simulation_command_match.group(0).split('\n')[1].strip() if simulation_command_match else None
 
-    #if simulation_command:
-        # Run the simulation command
-        #os.system(simulation_command)
-
-    if simulation_command:
+    if simulation_command and simulate_code:
         simulation_result = subprocess.run(simulation_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         simulation_output = simulation_result.stdout + simulation_result.stderr
 
