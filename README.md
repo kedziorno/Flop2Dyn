@@ -40,3 +40,7 @@ PyFloGen is a toolkit for generating VHDL code for floating-point operations, sp
     python3 float_gen.py -h
     ```
     This will list all possible parameters and their descriptions.
+
+### Notes
+
+- During code generation and simulation, the file name "flopoco.vhdl" and directory name "work" are used in the working directory. So make sure these file names are available.
