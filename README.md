@@ -30,4 +30,4 @@ PyFloGen is an advanced toolkit for generating VHDL code for floating-point oper
 3. Run "float_gen.py" with desired parameters.
     ```bash
     python3 float_gen.py -h
-This will list all possible parameters and their descriptions.
+    This will list all possible parameters and their descriptions.
