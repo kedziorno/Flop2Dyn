@@ -1,6 +1,6 @@
 # PyFloGen - VHDL Generation for FloPoCo and Dynamatic Integration
 
-PyFloGen is an advanced toolkit for generating VHDL code for floating-point operations, specifically tailored for integration with Dynamatic, an academic, open-source high-level synthesis compiler. This tool automates the process of creating VHDL modules via FloPoCo, making it seamless to incorporate floating-point computations in Dynamatic's dynamically-scheduled circuits generated from C/C++ code.
+PyFloGen is a toolkit for generating VHDL code for floating-point operations, specifically tailored for integration with Dynamatic, an academic, open-source high-level synthesis compiler. This tool automates the process of creating VHDL modules via FloPoCo, making it easier to incorporate floating-point computations in Dynamatic's dynamically-scheduled circuits generated from C/C++ code.
 
 ## Features
 
@@ -21,7 +21,7 @@ PyFloGen is an advanced toolkit for generating VHDL code for floating-point oper
 
 1. Clone the PyFloGen repository:
    ```bash
-   git clone https://github.com/yourusername/PyFloGen.git
+   git clone https://github.com/sevkobat/PyFloGen.git
 
 2. Navigate to the PyFloGen directory:
     ````bash

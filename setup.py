@@ -76,7 +76,7 @@ operators_info = {
     # Add more operators as needed
 }
 
-# Wrapper templates
+# Wrapper templates for components
 buffer_template = "buff: entity work.delay_buffer(arch) generic map({buffer_delay})\n        port map(clk,\n                rst,\n                join_valid,\n                oehb_ready,\n                buff_valid);"
 join_template = "join: entity work.join(arch) generic map(2)\n        port map( pValidArray,\n                oehb_ready,\n                join_valid,\n                readyArray);"
 oehb_template = "oehb: entity work.OEHB(arch) generic map (1, 1, 1, 1)\n                port map (\n                --inputspValidArray\n                    clk => clk,\n                    rst => rst,\n                    pValidArray(0)  => buff_valid, -- real or speculatef condition (determined by merge1)\n                    nReadyArray(0) => nReadyArray(0),\n                    validArray(0) => validArray(0),\n                --outputs\n                    readyArray(0) => oehb_ready,\n                    dataInArray(0) => oehb_datain,\n                    dataOutArray(0) => oehb_dataOut\n                );"
@@ -91,7 +91,7 @@ ieee2nfloat_1_template = "ieee2nfloat_1: entity work.InputIEEE_{bit}bit(arch)\n 
 sub_intermediate_signal = "--intermediate signal for bit flipping for subtraction \n    signal Y_flipped : std_logic_vector(31 downto 0); \n"
 bit_flipper = "bitflipper: entity work.FlipMSB generic map (BIT_WIDTH => {bit_width}) \n                port map ( \n                    input_signal => dataInArray(1), \n                    output_signal => Y_flipped \n                );"
 
-
+# Defining a dictionary to make access to templates easier and more consistent
 component_templates = {
     "buffer_template": buffer_template,
     "join_template": join_template,
@@ -107,6 +107,7 @@ component_templates = {
 }
 
 # TODO: Flags of corresponding floating point comparators in FloPoCo
+# note: it might make more sense to include this information in operators_info
 comparison_flags = {
 
 }

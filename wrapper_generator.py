@@ -3,39 +3,38 @@
 #TODO: take the edge cases into account, where pipeline-depth is 1 or 0
 #TODO: implement wrappers for 64bit operators
 def create_wrappers(operators, template_path, combined_file_path, operators_info, component_templates):
-    #print(operators)
-    # Open the combined file in write mode to overwrite existing content
+    # Create/overwrite wrapper VHDL file
     with open(combined_file_path, 'w') as combined_file:
         for operator in operators:
             # Read the template for each operator
             with open(template_path, 'r') as file:
                 template = file.read()
-            #print(operator)
-                
+            
+            # Format the operator with appropriate parameters
             main_component = component_templates['main_component_template'].format(
                 operator_name=operator['name'],
                 input_width=operator['bitSize'] + 2 - 1, # +2 because 2 extra bits in nFloat
                 output_width=operators_info[operator['name']]["output_size"][operator['bitSize']] - 1
             )
+            # Handle intermediate signals between conversion (between IEEE and nFloat) and operator
             intermediate_input = component_templates['intermediate_input_template'].format(operator_width=operator['bitSize'] + 2 - 1)
             intermediate_output = component_templates['intermediate_output_template'].format(
                 operator_width=operators_info[operator['name']]["output_size"][operator['bitSize']] - 1)
             
+            # Handle first IEEE to nFloat converter
             ieee2nfloat_0 = component_templates['ieee2nfloat_0_template'].format(bit=operator["bitSize"])
 
-            # Prepare additional VHDL code based on operator type
+            # Handle second IEEE to nFloat converter and additional components depending on the operator
             if operator['name'] == "FloatingPointSubtractor":
                 additional_signals = component_templates['sub_intermediate_signal']
                 bit_flip_instance = component_templates['bit_flipper'].format(bit_width=operator['bitSize'])
-                #entity_connection = "Y_flipped"
                 ieee2nfloat_1 = component_templates['ieee2nfloat_1_template'].format(bit=operator["bitSize"], entity_connection="Y_flipped")
             else:
                 additional_signals = ""
                 bit_flip_instance = ""
-                #entity_connection = "dataInArray(1)"
                 ieee2nfloat_1 = component_templates['ieee2nfloat_1_template'].format(bit=operator["bitSize"], entity_connection="dataInArray(1)")
 
-            # If the output is not a float (e.g FP comparator), do not instantiate converter
+            # If the output is not a float (e.g FP comparator), do not instantiate converter from nFloat to IEEE
             if operators_info[operator['name']]["output_size"][operator['bitSize']] == 1:
                 nfloat2ieee = ""
             else:

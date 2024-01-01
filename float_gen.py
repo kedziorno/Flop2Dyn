@@ -29,9 +29,9 @@ def main():
 
     # Parse the arguments
     args = parser.parse_args()
-    # print(args)
+    
+    # Import the config file
     config = read_config(args.config_file_name)
-    # print(args.config_file_name)
     operators = config['operators']
 
     #This list will contain the path(s) to all generated vhdl files, later these files will be merged
@@ -40,7 +40,9 @@ def main():
     #This dictionary will contain information about the generated operators that will be used in wrapper generation
     operators_info = []
 
+    # Iterate over all operators in the config file and generate and simulate corresponding VHDL code.
     for operator in operators:
+        # Generate code for the operator and save information about operator to vhdl_info
         vhdl_info = generate_vhdl(
             operator, args.num_test_vectors, 
             args.vhdl_output_dir, 
@@ -49,7 +51,8 @@ def main():
             args.simulate_code, 
             setup.operators_info)
 
-        # Store information regarding the generation of operators in this list
+        # Store information regarding the generation of operators in the list 'operators_info'.
+        # This information will be used while generating wrappers.
         operator_info = {
             'name': operator['name'],
             'bitSize': operator['bitSize'],
@@ -57,20 +60,23 @@ def main():
         }
         operators_info.append(operator_info)
 
+        # Print information about pipeline-depth of generated operator
         if vhdl_info['pipeline_depth'] is not None:
             print(f"Pipeline depth: {vhdl_info['pipeline_depth']}")
             pipeline_depth = vhdl_info['pipeline_depth']
         else:
             print("Pipeline-depth regex is not working")
 
+        # Add the path of the generated file to the list 'path_list'
         if 'vhdl_file_path' in vhdl_info:
             path_list.append(vhdl_info['vhdl_file_path'])
             print(f"Generated VHDL file moved to: {vhdl_info['vhdl_file_path']}")
 
+    # Generate wrappers for the generated VHDL code.
     wrapper_path = os.path.join(args.vhdl_output_dir, args.wrapper_file_name)
     create_wrappers(operators_info, args.template_path, wrapper_path, setup.operators_info, setup.component_templates)
 
-    # combined_vhdl_file_path = args.out_file_name
+    # Combine all operators in a single VHDL file.
     combined_vhdl_file_path = os.path.join(args.vhdl_output_dir, args.out_file_name)
     combine_vhdl_files(path_list, combined_vhdl_file_path)
 
