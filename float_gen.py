@@ -14,7 +14,7 @@ from wrapper_generator import create_wrappers
 
 def main():
     # Create the parser
-    parser = argparse.ArgumentParser(description='Process VHDL files.')
+    parser = argparse.ArgumentParser(description='Generate floating point arithmetic units using FloPoCo.')
     
     # Add optional arguments
     parser.add_argument('--vhdl_output_dir', help='Directory for VHDL output. Default is current working directory.', default=setup.vhdl_output_dir)
