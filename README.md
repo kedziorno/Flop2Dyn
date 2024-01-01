@@ -4,8 +4,8 @@ PyFloGen is an advanced toolkit for generating VHDL code for floating-point oper
 
 ## Features
 
-- Automated VHDL code generation compatible with FloPoCo.
-- Custom wrapper generation for seamless integration with Dynamatic.
+- Automated VHDL code generation using FloPoCo.
+- Custom wrapper generation for integration with Dynamatic.
 - Support for a variety of floating-point operations including addition, subtraction, multiplication, and division.
 - Command-line interface for adaptable and dynamic usage.
 - Simulation and testbench generation for robust testing and validation.
@@ -30,4 +30,5 @@ PyFloGen is an advanced toolkit for generating VHDL code for floating-point oper
 3. Run "float_gen.py" with desired parameters.
     ```bash
     python3 float_gen.py -h
+    ```
     This will list all possible parameters and their descriptions.
