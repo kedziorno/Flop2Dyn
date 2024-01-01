@@ -22,3 +22,12 @@ PyFloGen is an advanced toolkit for generating VHDL code for floating-point oper
 1. Clone the PyFloGen repository:
    ```bash
    git clone https://github.com/yourusername/PyFloGen.git
+
+2. Navigate to the PyFloGen directory:
+    ````bash
+    cd PyFloGen
+
+3. Run "float_gen.py" with desired parameters.
+    ```bash
+    python3 float_gen.py -h
+This will list all possible parameters and their descriptions.
