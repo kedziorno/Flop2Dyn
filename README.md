@@ -17,6 +17,14 @@ PyFloGen is a toolkit for generating VHDL code for floating-point operations, sp
 - Python 3.x
 - FloPoCo (Floating Point Core Generator) installed.
 
+### Overview of project
+
+- float_gen.py includes the main function.
+- float_config.json is an example configuration file.
+- The directory lib contains additional VHDL code. The generated VHDL code will depend on this code.
+- setup.py includes default parameters and variables.
+- wrapper_template.vhd is the VHDL template with placeholders.
+
 ### Installation
 
 1. Clone the PyFloGen repository:
