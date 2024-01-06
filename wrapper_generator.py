@@ -2,14 +2,10 @@
 
 #TODO: take the edge cases into account, where pipeline-depth is 1 or 0
 #TODO: implement wrappers for 64bit operators
-def create_wrappers(operators, template_path, combined_file_path, operators_info, component_templates):
+def create_wrappers(operators, template, combined_file_path, operators_info, component_templates):
     # Create/overwrite wrapper VHDL file
     with open(combined_file_path, 'w') as combined_file:
         for operator in operators:
-            # Read the template for each operator
-            with open(template_path, 'r') as file:
-                template = file.read()
-            
             # Format the operator with appropriate parameters
             main_component = component_templates['main_component_template'].format(
                 operator_name=operator['name'],

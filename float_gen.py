@@ -74,7 +74,7 @@ def main():
 
     # Generate wrappers for the generated VHDL code.
     wrapper_path = os.path.join(args.vhdl_output_dir, args.wrapper_file_name)
-    create_wrappers(operators_info, args.template_path, wrapper_path, setup.operators_info, setup.component_templates)
+    create_wrappers(operators_info, setup.wrapper_template, wrapper_path, setup.operators_info, setup.component_templates)
 
     # Combine all operators in a single VHDL file.
     combined_vhdl_file_path = os.path.join(args.vhdl_output_dir, args.out_file_name)
