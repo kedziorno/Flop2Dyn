@@ -73,5 +73,5 @@ def combine_vhdl_files(file_paths, combined_file_path):
         
     # Remove the original VHDL files
     for file_path in file_paths:
-        print("Removing file: " + file_path)
+        print("Merged file: " + file_path)
         os.remove(file_path)
