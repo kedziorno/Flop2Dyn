@@ -37,15 +37,19 @@ def create_wrappers(operators, template, combined_file_path, operators_info, com
                 nfloat2ieee = component_templates['nfloat2ieee_template'].format(bit=operator['bitSize'])
 
             # TODO: Prepare VHDL code based on pipeline_depth
-            if not operator['pipeline_depth']:
+            if operator['pipeline_depth'] == 0 or operator['pipeline_depth'] == 1:
                 buffer = ""
-                print("Warning: No pipeline depth found")
+                signal_join_valid = ""
+                join = component_templates['join_template'].format(join_valid="buff_valid")
+                print("Warning: Pipeline depth of " + str(operator['name']) + " is " + str(operator['pipeline_depth']))
             elif operator['pipeline_depth'] > 1:
                 buffer = component_templates['buffer_template'].format(buffer_delay=operator['pipeline_depth'] - 1)
-            elif operator['pipeline_depth'] == 1:
-                buffer = ""
+                signal_join_valid = component_templates['signal_join_valid']
+                join = component_templates['join_template'].format(join_valid="join_valid")
+            #elif operator['pipeline_depth'] == 1:
+            #    buffer = ""
             else:
-                print("Warning: Pipeline depth: " + str(operator['pipeline_depth']))
+                print("Warning: Something went wrong. Pipeline depth: " + str(operator['pipeline_depth']) + " for operator " + str(operator['name']))
 
             # Replace placeholders in the template
             wrapper_vhdl = template.format(
@@ -56,13 +60,15 @@ def create_wrappers(operators, template, combined_file_path, operators_info, com
                 additional_signals=additional_signals,
                 bit_flip_instance=bit_flip_instance,
                 #entity_connection=entity_connection,
+                join=join,
                 buffer=buffer,
                 main_component=main_component,
                 intermediate_input=intermediate_input,
                 intermediate_output=intermediate_output,
                 ieee2nfloat_0 = ieee2nfloat_0,
                 ieee2nfloat_1 = ieee2nfloat_1,
-                nfloat2ieee = nfloat2ieee
+                nfloat2ieee = nfloat2ieee,
+                signal_join_valid = signal_join_valid
             )
 
             # Write the formatted VHDL to the combined file

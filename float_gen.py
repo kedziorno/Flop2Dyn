@@ -51,21 +51,23 @@ def main():
             args.skip_simulation, 
             setup.operators_info)
 
-        # Store information regarding the generation of operators in the list 'operators_info'.
-        # This information will be used while generating wrappers.
-        operator_info = {
-            'name': operator['name'],
-            'bitSize': operator['bitSize'],
-            'pipeline_depth': vhdl_info['pipeline_depth'],
-        }
-        operators_info.append(operator_info)
-
         # Print information about pipeline-depth of generated operator
         if vhdl_info['pipeline_depth'] is not None:
             print(f"Pipeline depth: {vhdl_info['pipeline_depth']}")
             pipeline_depth = vhdl_info['pipeline_depth']
         else:
-            print("Pipeline-depth regex is not working")
+            print("Entity not pipelined or pipeline-depth regex is not working")
+            pipeline_depth = 0
+
+
+        # Store information regarding the generation of operators in the list 'operators_info'.
+        # This information will be used while generating wrappers.
+        operator_info = {
+            'name': operator['name'],
+            'bitSize': operator['bitSize'],
+            'pipeline_depth': pipeline_depth,
+        }
+        operators_info.append(operator_info)
 
         # Add the path of the generated file to the list 'path_list'
         if 'vhdl_file_path' in vhdl_info:

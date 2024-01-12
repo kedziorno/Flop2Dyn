@@ -5,7 +5,7 @@ import os
 config_file_name = "float_config.json"
 
 # Path to the FloPoCo executable
-flopoco_executable_path = '/home/sevket/flopoco/build/flopoco'
+flopoco_executable_path = '/home/sevket/flopoco/flopoco/build/flopoco'
 
 # Path to wrapper template
 template_path = 'wrapper_template.vhd'
@@ -78,7 +78,7 @@ operators_info = {
 
 # Wrapper templates for components
 buffer_template = "buff: entity work.delay_buffer(arch) generic map({buffer_delay})\n        port map(clk,\n                rst,\n                join_valid,\n                oehb_ready,\n                buff_valid);"
-join_template = "join: entity work.join(arch) generic map(2)\n        port map( pValidArray,\n                oehb_ready,\n                join_valid,\n                readyArray);"
+join_template = "join: entity work.join(arch) generic map(2)\n        port map( pValidArray,\n                oehb_ready,\n                {join_valid},\n                readyArray);"
 oehb_template = "oehb: entity work.OEHB(arch) generic map (1, 1, 1, 1)\n                port map (\n                --inputspValidArray\n                    clk => clk,\n                    rst => rst,\n                    pValidArray(0)  => buff_valid, -- real or speculatef condition (determined by merge1)\n                    nReadyArray(0) => nReadyArray(0),\n                    validArray(0) => validArray(0),\n                --outputs\n                    readyArray(0) => oehb_ready,\n                    dataInArray(0) => oehb_datain,\n                    dataOutArray(0) => oehb_dataOut\n                );"
 main_component_template = "component {operator_name} is\n        port (\n            clk : in std_logic;\n            X : in  std_logic_vector({input_width} downto 0);\n            Y : in  std_logic_vector({input_width} downto 0);\n            R : out  std_logic_vector({output_width} downto 0)\n        );\n    end component;"
 intermediate_input_template = "signal X_in, Y_in : std_logic_vector({operator_width} downto 0);"
@@ -90,6 +90,9 @@ ieee2nfloat_1_template = "ieee2nfloat_1: entity work.InputIEEE_{bit}bit(arch)\n 
 # Following strings will be used in modifying the wrapper to construct the wrapper for the subtractor
 sub_intermediate_signal = "--intermediate signal for bit flipping for subtraction \n    signal Y_flipped : std_logic_vector(31 downto 0); \n"
 bit_flipper = "bitflipper: entity work.FlipMSB generic map (BIT_WIDTH => {bit_width}) \n                port map ( \n                    input_signal => dataInArray(1), \n                    output_signal => Y_flipped \n                );"
+
+#
+signal_join_valid = "signal join_valid : STD_LOGIC;"
 
 # Defining a dictionary to make access to templates easier and more consistent
 component_templates = {
@@ -103,7 +106,8 @@ component_templates = {
     "ieee2nfloat_0_template": ieee2nfloat_0_template,
     "ieee2nfloat_1_template": ieee2nfloat_1_template,
     "sub_intermediate_signal": sub_intermediate_signal,
-    'bit_flipper': bit_flipper
+    'bit_flipper': bit_flipper,
+    "signal_join_valid": signal_join_valid
 }
 
 # TODO: Flags of corresponding floating point comparators in FloPoCo
@@ -139,7 +143,7 @@ end entity;
 architecture arch of {dynamatic_name} is
     {main_component}
 
-    signal join_valid : STD_LOGIC;
+    {signal_join_valid}
 
     signal buff_valid, oehb_valid, oehb_ready : STD_LOGIC;
     signal oehb_dataOut, oehb_datain : std_logic_vector(0 downto 0);
@@ -155,11 +159,7 @@ architecture arch of {dynamatic_name} is
     begin
 
 
-        join: entity work.join(arch) generic map(2)
-        port map( pValidArray,
-                oehb_ready,
-                join_valid,
-                readyArray);
+        {join}
 
         {buffer}
 
