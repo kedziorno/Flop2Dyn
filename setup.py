@@ -127,7 +127,10 @@ use work.customTypes.all;
 
 entity {dynamatic_name} is
 Generic (
- INPUTS: integer; OUTPUTS: integer; DATA_SIZE_IN: integer; DATA_SIZE_OUT: integer
+ INPUTS: integer := 2; 
+ OUTPUTS: integer := 1; 
+ DATA_SIZE_IN: integer := 32; 
+ DATA_SIZE_OUT: integer := 32
 );
 port (
   clk : IN STD_LOGIC;
