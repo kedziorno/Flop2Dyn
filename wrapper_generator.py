@@ -7,8 +7,12 @@ def create_wrappers(operators, template, combined_file_path, operators_info, com
     with open(combined_file_path, 'w') as combined_file:
         for operator in operators:
             # Format the operator with appropriate parameters
+            ce_signal_1 = ""
+            for i in range(operator['pipeline_depth']):
+                ce_signal_1 = ce_signal_1 + f", ce_{i+1}"
             main_component = component_templates['main_component_template'].format(
                 operator_name=operator['name'],
+                ce=ce_signal_1,
                 input_width=operator['bitSize'] + 2 - 1, # +2 because 2 extra bits in nFloat
                 output_width=operators_info[operator['name']]["output_size"][operator['bitSize']] - 1
             )
@@ -51,6 +55,10 @@ def create_wrappers(operators, template, combined_file_path, operators_info, com
             else:
                 print("Warning: Something went wrong. Pipeline depth: " + str(operator['pipeline_depth']) + " for operator " + str(operator['name']))
 
+            ce_signal_2 = ""
+            for i in range(operator['pipeline_depth']):
+                ce_signal_2 = ce_signal_2 + f"\n            ce_{i+1} => oehb_ready,"
+
             # Replace placeholders in the template
             wrapper_vhdl = template.format(
                 dynamatic_name=operators_info[operator['name']]['wrapper_name'],
@@ -68,7 +76,8 @@ def create_wrappers(operators, template, combined_file_path, operators_info, com
                 ieee2nfloat_0 = ieee2nfloat_0,
                 ieee2nfloat_1 = ieee2nfloat_1,
                 nfloat2ieee = nfloat2ieee,
-                signal_join_valid = signal_join_valid
+                signal_join_valid = signal_join_valid,
+                clock_enable = ce_signal_2
             )
 
             # Write the formatted VHDL to the combined file

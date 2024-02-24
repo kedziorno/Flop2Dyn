@@ -5,7 +5,7 @@ import os
 config_file_name = "float_config.json"
 
 # Path to the FloPoCo executable
-flopoco_executable_path = '/home/sevket/flopoco/flopoco/build/flopoco'
+flopoco_executable_path = '/home/sevket/flopoco/build/flopoco'
 
 # Path to wrapper template
 template_path = 'wrapper_template.vhd'
@@ -80,12 +80,23 @@ operators_info = {
 buffer_template = "buff: entity work.delay_buffer(arch) generic map({buffer_delay})\n        port map(clk,\n                rst,\n                join_valid,\n                oehb_ready,\n                buff_valid);"
 join_template = "join: entity work.join(arch) generic map(2)\n        port map( pValidArray,\n                oehb_ready,\n                {join_valid},\n                readyArray);"
 oehb_template = "oehb: entity work.OEHB(arch) generic map (1, 1, 1, 1)\n                port map (\n                --inputspValidArray\n                    clk => clk,\n                    rst => rst,\n                    pValidArray(0)  => buff_valid, -- real or speculatef condition (determined by merge1)\n                    nReadyArray(0) => nReadyArray(0),\n                    validArray(0) => validArray(0),\n                --outputs\n                    readyArray(0) => oehb_ready,\n                    dataInArray(0) => oehb_datain,\n                    dataOutArray(0) => oehb_dataOut\n                );"
-main_component_template = """component {operator_name} is\n        port (\n            clk, ce : in std_logic;\n            X : in  std_logic_vector({input_width} downto 0);\n            Y : in  std_logic_vector({input_width} downto 0);\n            R : out  std_logic_vector({output_width} downto 0)\n        );\n    end component;"""
 intermediate_input_template = "signal X_in, Y_in : std_logic_vector({operator_width} downto 0);"
 intermediate_output_template = "signal R_out : std_logic_vector({operator_width} downto 0);"
 nfloat2ieee_template = "nfloat2ieee : entity work.OutputIEEE_{bit}bit(arch)\n                port map (\n                    --input\n                    X => R_out,\n                    --ouput\n                    R => dataOutArray(0)\n                );"
 ieee2nfloat_0_template = "ieee2nfloat_0: entity work.InputIEEE_{bit}bit(arch)\n                port map (\n                    --input\n                    X => dataInArray(0),\n                    --output\n                    R => X_in\n                );"
 ieee2nfloat_1_template = "ieee2nfloat_1: entity work.InputIEEE_{bit}bit(arch)\n                port map (\n                    --input\n                    X => {entity_connection},\n                    --output\n                    R => Y_in\n                );"
+
+
+
+main_component_template = """component {operator_name} is
+        port (
+            clk{ce} : in std_logic;
+            X : in  std_logic_vector({input_width} downto 0);
+            Y : in  std_logic_vector({input_width} downto 0);
+            R : out  std_logic_vector({output_width} downto 0)
+            );
+    end component;"""
+
 
 # Following strings will be used in modifying the wrapper to construct the wrapper for the subtractor
 sub_intermediate_signal = "--intermediate signal for bit flipping for subtraction \n    signal Y_flipped : std_logic_vector(31 downto 0); \n"
@@ -190,8 +201,7 @@ architecture arch of {dynamatic_name} is
 
         operator :  component {operator_name}
         port map (
-            clk   => clk,
-            ce => oehb_ready,
+            clk   => clk,{clock_enable}
             X  => X_in,
             Y  => Y_in,
             R  => R_out
