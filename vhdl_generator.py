@@ -35,7 +35,8 @@ def generate_vhdl(
         f'wE={wE}', 
         f'wF={wF}', 
         f'frequency={operator_config["targetFrequencyMHz"]}',
-        f'name={operator_config["name"]}'
+        f'name={operator_config["name"]}',
+        f'clockEnable=True'
     ]
 
     # Modify command to include testbench generation with number of test vectors

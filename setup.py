@@ -80,7 +80,7 @@ operators_info = {
 buffer_template = "buff: entity work.delay_buffer(arch) generic map({buffer_delay})\n        port map(clk,\n                rst,\n                join_valid,\n                oehb_ready,\n                buff_valid);"
 join_template = "join: entity work.join(arch) generic map(2)\n        port map( pValidArray,\n                oehb_ready,\n                {join_valid},\n                readyArray);"
 oehb_template = "oehb: entity work.OEHB(arch) generic map (1, 1, 1, 1)\n                port map (\n                --inputspValidArray\n                    clk => clk,\n                    rst => rst,\n                    pValidArray(0)  => buff_valid, -- real or speculatef condition (determined by merge1)\n                    nReadyArray(0) => nReadyArray(0),\n                    validArray(0) => validArray(0),\n                --outputs\n                    readyArray(0) => oehb_ready,\n                    dataInArray(0) => oehb_datain,\n                    dataOutArray(0) => oehb_dataOut\n                );"
-main_component_template = "component {operator_name} is\n        port (\n            clk : in std_logic;\n            X : in  std_logic_vector({input_width} downto 0);\n            Y : in  std_logic_vector({input_width} downto 0);\n            R : out  std_logic_vector({output_width} downto 0)\n        );\n    end component;"
+main_component_template = """component {operator_name} is\n        port (\n            clk, ce : in std_logic;\n            X : in  std_logic_vector({input_width} downto 0);\n            Y : in  std_logic_vector({input_width} downto 0);\n            R : out  std_logic_vector({output_width} downto 0)\n        );\n    end component;"""
 intermediate_input_template = "signal X_in, Y_in : std_logic_vector({operator_width} downto 0);"
 intermediate_output_template = "signal R_out : std_logic_vector({operator_width} downto 0);"
 nfloat2ieee_template = "nfloat2ieee : entity work.OutputIEEE_{bit}bit(arch)\n                port map (\n                    --input\n                    X => R_out,\n                    --ouput\n                    R => dataOutArray(0)\n                );"
@@ -190,7 +190,8 @@ architecture arch of {dynamatic_name} is
 
         operator :  component {operator_name}
         port map (
-            clk   => clk and oehb_ready,
+            clk   => clk,
+            ce => oehb_ready,
             X  => X_in,
             Y  => Y_in,
             R  => R_out
