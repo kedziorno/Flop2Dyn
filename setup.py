@@ -216,21 +216,47 @@ supported_operators_info =[
         "flopoco_name": "FPAdd",
         "exponent_size": 8,
         "mantissa_size": 23,
-        "name" : "FPAdd",
-    }#,
-    # "FloatingPointMultiplier": {
-    #     "exponent_size": 8,
-    #     "mantissa_size": 23,
-    #     "name" : "FPMult",
-    # },
-    # "FloatingPointDivider": {
-    #     "exponent_size": 8,
-    #     "mantissa_size": 23,
-    #     "name" : "FPDiv",
-    # },
-    # "FloatingPointSubtractor": {
-    #     "exponent_size": 8,
-    #     "mantissa_size": 23,
-    #     "name" : "FPAdd",
-    # }
+    },
+    {
+        "name": "FloatingPointMultiplier",
+        "flopoco_name": "FPMult",
+        "exponent_size": 8,
+        "mantissa_size": 23,
+    },
+    {
+        "name": "FloatingPointDivider",
+        "flopoco_name": "FPDiv",
+        "exponent_size": 8,
+        "mantissa_size": 23,
+    },
+    {
+        "name": "FloatingPointComparator",
+        "flopoco_name": "FPComparator",
+        "exponent_size": 8,
+        "mantissa_size": 23,
+    },
+    {
+        "name": "FloatingPointPower",
+        "flopoco_name": "FPPow",
+        "exponent_size": 8,
+        "mantissa_size": 23,
+    },
+    {
+        "name": "FloatingPointSquareRoot",
+        "flopoco_name": "FPSqrt",
+        "exponent_size": 8,
+        "mantissa_size": 23,
+    },
+    {
+        "name": "FloatingPointExponential",
+        "flopoco_name": "FPExp",
+        "exponent_size": 8,
+        "mantissa_size": 23,
+    },
+    {
+        "name": "FloatingPointLogarithm",
+        "flopoco_name": "FPLog",
+        "exponent_size": 8,
+        "mantissa_size": 23,
+    }
 ]

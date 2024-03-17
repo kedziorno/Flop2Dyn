@@ -37,7 +37,7 @@ def get_pipeline_depth(operator_info, frequency):
     pipeline_depth_matches = re.findall(r'Pipeline depth = (\d+)', errors)
     
     # Select the last occurrence if there are any, otherwise set to None
-    pipeline_depth = int(pipeline_depth_matches[-1]) if pipeline_depth_matches else None
+    pipeline_depth = int(pipeline_depth_matches[-1]) if pipeline_depth_matches else 0
 
     return pipeline_depth
 
@@ -47,26 +47,30 @@ def main():
 
     # Iterate over the operators_info list
     for operator_info in setup.supported_operators_info:
-        frequency_to_pipeline_depth = [None] * (900 - 100) // 10
+        # Create a new figure for each operator
+        plt.figure()
+        frequency_to_pipeline_depth = [None] * ((900 - 100) // 10)
+        frequencies = [None] * ((900 - 100) // 10)
         for freq in range(100, 900, 10):
             # Get the pipeline depth and target frequency
             target_frequency = freq
             pipeline_depth = get_pipeline_depth(operator_info, target_frequency)
-            frequency_to_pipeline_depth[target_frequency // 10] = pipeline_depth
-            # Plot the values
-            frequencies = list(range(100, 900, 10))
-            plt.plot(frequencies, frequency_to_pipeline_depth)
-            plt.xlabel('Frequency')
-            plt.ylabel('Pipeline Depth')
-            # Save the plot as an image
-            plt.savefig('/Users/sevketbaturay/Documents/Flop2Dyn/plot.png')
+            frequencies[(freq - 100) // 10] = freq
+            frequency_to_pipeline_depth[(freq - 100) // 10] = pipeline_depth
+            print(freq)
+        
+        # Plot the values
+        # frequencies = list(range(100, 900, 10))
+        print("saving plot...")
+        plt.plot(frequencies, frequency_to_pipeline_depth)
+        print("labeling plot...")
+        plt.xlabel('Target frequency')
+        plt.ylabel('Pipeline Depth')
+        plt.title(operator_info["name"])  # Label the plot with operator_info["name"]
+        # Save the plot as an image
+        plt.savefig(f'/home/sevket/PyFloGen/plots/{operator_info["name"]}.png')
+        print("saved plot")
 
-        # Get the pipeline depth and target frequency
-        pipeline_depth = operator_info['pipeline_depth']
-        target_frequency = operator_info['target_frequency']  # Assuming 'target_frequency' is a key in operator_info
-
-        # Add the pipeline depth and target frequency to the mapping
-        pipeline_depth_to_frequency[pipeline_depth] = target_frequency
 
 # Now, pipeline_depth_to_frequency is a dictionary that maps pipeline depth to target frequency
     print(pipeline_depth_to_frequency)
