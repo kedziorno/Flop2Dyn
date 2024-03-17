@@ -4,6 +4,7 @@ import os
 import re
 import shutil
 import argparse
+import matplotlib.pyplot as plt
 
 import setup # This file contains variables
 from file_manager import read_config
@@ -12,28 +13,54 @@ from file_manager import combine_vhdl_files
 from vhdl_generator import generate_vhdl
 from wrapper_generator import create_wrappers
 
-def main():
-    # Create the parser
-    parser = argparse.ArgumentParser(description='Generate floating point arithmetic units using FloPoCo.')
+def get_pipeline_depth(operator_info, frequency):
+    # Construct the FloPoCo command based on the operator_config
+    command = [
+        setup.flopoco_executable_path, 
+        operator_info["flopoco_name"],
+        f'wE={operator_info["exponent_size"]}', 
+        f'wF={operator_info["mantissa_size"]}', 
+        f'frequency={frequency}',
+        f'name={operator_info["name"]}',
+        f'clockEnable=True'
+    ]
     
-    # Add optional arguments
-    parser.add_argument('--vhdl_output_dir', help='Directory for VHDL output. Default is current working directory.', default=setup.vhdl_output_dir)
-    parser.add_argument('--wrapper_file_name', help='Name of the wrapper file. Default is wrapper.vhd in current working directory.', default=setup.wrapper_file_name)
-    parser.add_argument('--template_path', help='Path to the wrapper template file. Default is wrapper_template.vhd in current working directory.', default=setup.template_path)
-    parser.add_argument('--out_file_name', help='Name of the output file. Default is combined.vhd', default=setup.out_file_name)
-    parser.add_argument('--num_test_vectors', type=int, help='Number of test vectors. Default is 10000', default=setup.num_test_vectors)
-    parser.add_argument('--config_file_name', help='Path to the configuration JSON file. Default is float_config.json in current working directory.', default=setup.config_file_name)
-    parser.add_argument('--flopoco_path', help='Path to the FloPoCo executable.', default=setup.flopoco_executable_path)
-    parser.add_argument('--keep_simulation_files', action='store_false', help='Prevents deletion of files created during simulation. No value required')
-    parser.add_argument('--skip_simulation', action='store_false', help='Prevents simulation. No value required')
+    # Execute the command and capture the output
+    process = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    output = process.stdout
+    
+    # Also capture any errors: IN THIS CASE errors contains the informative command line output
+    errors = process.stderr
 
-    # Parse the arguments
-    args = parser.parse_args()
+    # Determine the pipeline depth and thus the latency of the generated operator
+    # Find all occurrences of pipeline depth
+    pipeline_depth_matches = re.findall(r'Pipeline depth = (\d+)', errors)
+    
+    # Select the last occurrence if there are any, otherwise set to None
+    pipeline_depth = int(pipeline_depth_matches[-1]) if pipeline_depth_matches else None
 
+    return pipeline_depth
+
+
+def main():
     pipeline_depth_to_frequency = {}
 
     # Iterate over the operators_info list
-    for operator_info in setup.operators_info:
+    for operator_info in setup.supported_operators_info:
+        frequency_to_pipeline_depth = [None] * (900 - 100) // 10
+        for freq in range(100, 900, 10):
+            # Get the pipeline depth and target frequency
+            target_frequency = freq
+            pipeline_depth = get_pipeline_depth(operator_info, target_frequency)
+            frequency_to_pipeline_depth[target_frequency // 10] = pipeline_depth
+            # Plot the values
+            frequencies = list(range(100, 900, 10))
+            plt.plot(frequencies, frequency_to_pipeline_depth)
+            plt.xlabel('Frequency')
+            plt.ylabel('Pipeline Depth')
+            # Save the plot as an image
+            plt.savefig('/Users/sevketbaturay/Documents/Flop2Dyn/plot.png')
+
         # Get the pipeline depth and target frequency
         pipeline_depth = operator_info['pipeline_depth']
         target_frequency = operator_info['target_frequency']  # Assuming 'target_frequency' is a key in operator_info

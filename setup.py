@@ -209,3 +209,28 @@ architecture arch of {dynamatic_name} is
 end architecture;
 
 """
+
+supported_operators_info =[
+    {   
+        "name": "FloatingPointAdder",
+        "flopoco_name": "FPAdd",
+        "exponent_size": 8,
+        "mantissa_size": 23,
+        "name" : "FPAdd",
+    }#,
+    # "FloatingPointMultiplier": {
+    #     "exponent_size": 8,
+    #     "mantissa_size": 23,
+    #     "name" : "FPMult",
+    # },
+    # "FloatingPointDivider": {
+    #     "exponent_size": 8,
+    #     "mantissa_size": 23,
+    #     "name" : "FPDiv",
+    # },
+    # "FloatingPointSubtractor": {
+    #     "exponent_size": 8,
+    #     "mantissa_size": 23,
+    #     "name" : "FPAdd",
+    # }
+]
