@@ -44,19 +44,23 @@ def get_pipeline_depth(operator_info, frequency):
 
 def main():
     pipeline_depth_to_frequency = {}
+    step_size = 50
+    max_frequency = 900
+    min_frequency = 100
 
     # Iterate over the operators_info list
     for operator_info in setup.supported_operators_info:
         # Create a new figure for each operator
         plt.figure()
-        frequency_to_pipeline_depth = [None] * ((900 - 100) // 10)
-        frequencies = [None] * ((900 - 100) // 10)
-        for freq in range(100, 900, 10):
+        frequency_to_pipeline_depth = [None] * ((max_frequency - min_frequency) // step_size)
+        frequencies = [None] * ((max_frequency - min_frequency) // step_size)
+        print("entering for loop")
+        for freq in range(min_frequency, max_frequency, step_size):
             # Get the pipeline depth and target frequency
             target_frequency = freq
             pipeline_depth = get_pipeline_depth(operator_info, target_frequency)
-            frequencies[(freq - 100) // 10] = freq
-            frequency_to_pipeline_depth[(freq - 100) // 10] = pipeline_depth
+            frequencies[(freq - min_frequency) // step_size] = freq
+            frequency_to_pipeline_depth[(freq - min_frequency) // step_size] = pipeline_depth
             print(freq)
         
         # Plot the values
@@ -68,7 +72,7 @@ def main():
         plt.ylabel('Pipeline Depth')
         plt.title(operator_info["name"])  # Label the plot with operator_info["name"]
         # Save the plot as an image
-        plt.savefig(f'/home/sevket/PyFloGen/plots/{operator_info["name"]}.png')
+        plt.savefig(f'/home/sevket/PyFloGen/plots/50MHz_step/{operator_info["name"]}.png')
         print("saved plot")
 
 
