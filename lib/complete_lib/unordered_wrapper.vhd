@@ -89,6 +89,7 @@ entity fcmp_une_op is
              nReadyArray(0),
              validArray(0));
 
+    -- Outputs 1, if numbers are not equal, or at least one of the 2 numbers is NaN
     unordered_or_not_equal <= unordered or not equal;
     dataOutArray(0)(0) <= unordered_or_not_equal;
     
