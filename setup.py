@@ -5,7 +5,7 @@ import os
 config_file_name = "float_config.json"
 
 # Path to the FloPoCo executable
-flopoco_executable_path = '/home/sevket/flopoco/build/flopoco'
+flopoco_executable_path = '/home/user/_WORKSPACE_/flopoco/build/code/FloPoCoBin/flopoco'
 
 # Path to wrapper template
 template_path = 'wrapper_template.vhd'

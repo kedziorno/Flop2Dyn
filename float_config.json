@@ -3,22 +3,26 @@
     {
       "name": "FloatingPointAdder",
       "bitSize": 32,
-      "targetFrequencyMHz": 200
+      "targetFrequencyMHz": 200,
+      "isSubtractor" : false
     },
     {
       "name": "FloatingPointMultiplier",
       "bitSize": 32,
-      "targetFrequencyMHz": 200    
+      "targetFrequencyMHz": 200,
+      "isSubtractor" : false
     },
     {
       "name": "FloatingPointDivider",
       "bitSize": 32,
-      "targetFrequencyMHz": 200
+      "targetFrequencyMHz": 200,
+      "isSubtractor" : false
     },
     {
       "name": "FloatingPointSubtractor",
       "bitSize": 32,
-      "targetFrequencyMHz": 200
+      "targetFrequencyMHz": 200,
+      "isSubtractor" : true
     }
   ]
 }
