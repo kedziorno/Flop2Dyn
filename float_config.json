@@ -4,26 +4,58 @@
       "name": "FloatingPointAdder",
       "bitSize": 32,
       "targetFrequencyMHz": 200,
-      "isSubtractor" : false
+      "isSubtractor" : false,
+      "MSB" : 0,
+      "LSB" : 0
     },
     {
       "name": "FloatingPointMultiplier",
       "bitSize": 32,
       "targetFrequencyMHz": 200,
-      "isSubtractor" : false
-    },
+      "isSubtractor" : false,
+      "MSB" : 0,
+      "LSB" : 0
+     },
     {
       "name": "FloatingPointDivider",
       "bitSize": 32,
       "targetFrequencyMHz": 200,
-      "isSubtractor" : false
-    },
+      "isSubtractor" : false,
+      "MSB" : 0,
+      "LSB" : 0
+     },
     {
       "name": "FloatingPointSubtractor",
       "bitSize": 32,
       "targetFrequencyMHz": 200,
-      "isSubtractor" : true
+      "isSubtractor" : true,
+      "MSB" : 0,
+      "LSB" : 0
+     },
+    {
+      "name": "FloatingPointSQRT",
+      "bitSize": 32,
+      "targetFrequencyMHz": 200,
+      "isSubtractor" : false,
+      "MSB" : 0,
+      "LSB" : 0
+     },
+    {
+      "name": "Fix2FloatingPoint",
+      "bitSize": 32,
+      "targetFrequencyMHz": 200,
+      "isSubtractor" : false,
+      "MSB" : 50,
+      "LSB" : 20
+    },
+    {
+      "name": "FloatingPoint2Fix",
+      "bitSize": 32,
+      "targetFrequencyMHz": 200,
+      "isSubtractor" : false,
+      "MSB" : 50,
+      "LSB" : 20
     }
-  ]
+   ]
 }
 

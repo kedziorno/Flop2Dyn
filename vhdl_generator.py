@@ -37,6 +37,8 @@ def generate_vhdl(
         f'frequency={operator_config["targetFrequencyMHz"]}',
         f'name={operator_config["name"]}',
         f'sub={operator_config["isSubtractor"]}',
+        f'LSB={operator_config["LSB"]}',
+        f'MSB={operator_config["MSB"]}',
         f'clockEnable=True'
     ]
 

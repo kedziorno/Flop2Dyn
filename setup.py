@@ -5,7 +5,7 @@ import os
 config_file_name = "float_config.json"
 
 # Path to the FloPoCo executable
-flopoco_executable_path = '/home/user/_WORKSPACE_/flopoco/build/code/FloPoCoBin/flopoco'
+flopoco_executable_path = '/home/user/_WORKSPACE_/flopoco/build/bin/flopoco'
 
 # Path to wrapper template
 template_path = 'wrapper_template.vhd'
@@ -72,8 +72,38 @@ operators_info = {
         "flopoco_name": "FPAdd",
         "wrapper_name": 'fsub_op',
         "wrapper_name64": "fsub_op64"
-    }
+    },
     # Add more operators as needed
+    "FloatingPointSQRT": {
+        "input_size": "bitSize",
+        "output_size": {
+            32: 34,
+            64: 66
+        },
+        "flopoco_name": "FPSqrt",
+        "wrapper_name": 'fsqrt_op',
+        "wrapper_name64": "fsqrt_op64"
+    },
+    "FloatingPoint2Fix": {
+        "input_size": "bitSize",
+        "output_size": {
+            32: 34,
+            64: 66
+        },
+        "flopoco_name": "FP2Fix",
+        "wrapper_name": 'fp2fix_op',
+        "wrapper_name64": "fp2fix_op64"
+    },
+    "Fix2FloatingPoint": {
+        "input_size": "bitSize",
+        "output_size": {
+            32: 34,
+            64: 66
+        },
+        "flopoco_name": "Fix2FP",
+        "wrapper_name": 'fix2fp_op',
+        "wrapper_name64": "fix2fp_op64"
+    }
 }
 
 # Wrapper templates for components
